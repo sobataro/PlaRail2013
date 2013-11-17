@@ -1,20 +1,27 @@
 #include "Train.h"
 
-Train::Train(TrainType type, int pos) {
+Train::Train(TrainType type, Block pos, int pwmPinA, int pwmPinB) {
   this->type = type;
   setPos(pos);
   this->speed = MIN_SPEED;
+  
+  this->pwmPinA = pwmPinA;
+  this->pwmPinB = pwmPinB;
+  pinMode(pwmPinA, OUTPUT);
+  pinMode(pwmPinB, OUTPUT);
 }
 
 TrainType Train::getType() {
   return type;
 }
 
-int Train::getPos() {
+Block Train::getPos() {
   return pos;
 }
 
-void Train::setPos(int pos) {
+const int Train::pwmDuty[] = {0, 512, 640, 768, 1023};
+
+void Train::setPos(Block pos) {
   this->pos = pos;
 }
 
@@ -22,11 +29,19 @@ int Train::getSpeed() {
   return speed;
 }
 
+void Train::setSpeed(int speed) {
+  if (MIN_SPEED <= speed && speed <= MAX_SPEED) {
+    this->speed = speed;
+    analogWrite(pwmPinB, 0);
+    analogWrite(pwmPinA, pwmDuty[speed]);
+  }
+}
+
 void Train::accelerate() {
-  if (speed < MAX_SPEED) speed++;
+  setSpeed(speed + 1);
 }
 
 void Train::decelerate() {
-  if (MIN_SPEED < speed) speed--;
+  setSpeed(speed - 1);
 }
 

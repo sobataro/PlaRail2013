@@ -10,6 +10,8 @@ public:
   
   Block nextBlock(Train *train);
   
+  void loop();
+  
 private:
   Train *chuoRapid;
   Train *nex;
