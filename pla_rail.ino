@@ -14,8 +14,8 @@ void setup() {
   }
 }
 
-
 int pwm = 0;
 void loop() {
   ctc->loop();
+  delay(1000);
 }

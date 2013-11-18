@@ -3,18 +3,23 @@
 
 #include "PlaRail.h"
 #include "Train.h"
+#include "Signal.h"
 
 class CTC {
 public:
   CTC();
   
-  Block nextBlock(Train *train);
+  Block getWay(Train *train);
   
   void loop();
   
 private:
-  Train *chuoRapid;
-  Train *nex;
+  Train *chuoRapid, *nex;
+  static const int NUM_SIGNALS = 7;
+  Signal *signals[NUM_SIGNALS];
+  
+  void accelTest();
+  void maxSpeedTest();
 };
 
 #endif
