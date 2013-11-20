@@ -11,15 +11,16 @@ CTC::CTC() {
   TCCR4B = (TCCR4B & 0xF8) | 0x05; // set motor PWM to 30Hz
   chuoRapid = new Train(RAPID, CHOFU_SLAVE, 6, 7);
   
-  signals[FUDA_2] = new Signal(FUDA_2, NULL, Signal::NO_TRAIN, 13, 12, 11);
+//  signals[FUDA_2] = new Signal(FUDA_2, NULL, Signal::NO_TRAIN, 13, 12, 11);
+  signals[FUDA_2] = new Signal(FUDA_2, NULL, Signal::NO_TRAIN, 46, 47, 48);
   signals[FUDA_1] = new Signal(FUDA_1, NULL, Signal::NO_TRAIN, 10, 9, 8);
   signals[FUDA] = new Signal(FUDA, NULL, Signal::NO_TRAIN, 22, 3, 2);
   signals[CHOFU_2] = new Signal(CHOFU_2, NULL, Signal::NO_TRAIN, 24, 25, 26);
   signals[CHOFU_1] = new Signal(CHOFU_1, NULL, Signal::NO_TRAIN, 28, 29, 27);
   
-  Signal *chofuMaster = new Signal(CHOFU_MASTER, nex, Signal::PASSING, 32, 33, 34);
-  Signal *chofuSlave = new Signal(CHOFU_SLAVE, chuoRapid, Signal::PASSING, 36, 37, 35);
-  signals[CHOFU] = new Station(chofuMaster, chofuSlave, 5);
+  signals[CHOFU_MASTER] = new Signal(CHOFU_MASTER, nex, Signal::APPROACHING, 32, 33, 34);
+  signals[CHOFU_SLAVE] = new Signal(CHOFU_SLAVE, chuoRapid, Signal::APPROACHING, 36, 37, 35);
+  signals[CHOFU] = new Station(signals[CHOFU_MASTER], signals[CHOFU_SLAVE], 5);
   
   signals[FUDA_2]->setNextSignal(signals[FUDA_1]);
   signals[FUDA_1]->setNextSignal(signals[FUDA]);
@@ -29,15 +30,17 @@ CTC::CTC() {
   signals[CHOFU]->setNextSignal(signals[FUDA_2]);
   
   int greenLedPins[] = {43, 42, 41};
-  controller = new Controller(chuoRapid, 39, 38, 40, greenLedPins);
+  controller = new Controller(chuoRapid, 39, 38, 40, greenLedPins, signals);
+  
+  nexBlock = CHOFU_MASTER;
+  nexRound = 0;
 }
 
 void CTC::loop() {
 //  accelTest();
+  nex->setSpeed(2);
 
-  nex->setSpeed(Train::MAX_SPEED);
   int changed = 0;
-  
   for (int i = 0; i < NUM_SIGNALS; i++) {
     changed += signals[i]->check();
   }

@@ -20,14 +20,15 @@ Block Train::getPos() {
   return pos;
 }
 
-const int Train::pwmDuty[] = {0, 144, 192, 255};
-
 void Train::setPos(Block pos) {
   this->pos = pos;
 }
 
+const int Train::pwmDuty[] = {0, 144, 192, 255};
+//const int Train::pwmDuty[] = {0, 255, 255, 255};
+
 int Train::getSpeed() {
-  return speed;
+  return this->speed;
 }
 
 void Train::setSpeed(int speed) {
@@ -36,17 +37,22 @@ void Train::setSpeed(int speed) {
   }
   if (MIN_SPEED <= speed && speed <= MAX_SPEED) {
     this->speed = speed;
-    analogWrite(pwmPinB, 0);
-    analogWrite(pwmPinA, pwmDuty[speed]);
+    if (speed == MIN_SPEED) {
+      analogWrite(pwmPinA, 255);
+      analogWrite(pwmPinB, 255);
+    } else {
+      analogWrite(pwmPinB, 0);
+      analogWrite(pwmPinA, pwmDuty[speed]);
+    }
   }
 }
 
 void Train::accelerate() {
-  setSpeed(speed + 1);
+  setSpeed(this->speed + 1);
 }
 
 void Train::decelerate() {
-  setSpeed(speed - 1);
+  setSpeed(this->speed - 1);
 }
 
 boolean Train::isRestricted() {

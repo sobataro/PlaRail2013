@@ -1,6 +1,6 @@
 #include "Controller.h"
 
-Controller::Controller(Train *train, int accelButtonPin, int decelButtonPin, int redLedPin, int greenLedPins[Train::SPEED_LEVELS]) {
+Controller::Controller(Train *train, int accelButtonPin, int decelButtonPin, int redLedPin, int greenLedPins[Train::SPEED_LEVELS], Signal* signals[NUM_REAL_SIGNALS]) {
   this->train = train;
   this->redLedPin = redLedPin;
   pinMode(redLedPin, OUTPUT);
@@ -10,6 +10,8 @@ Controller::Controller(Train *train, int accelButtonPin, int decelButtonPin, int
   }
   accelButton = new PushSwitch(accelButtonPin, 200, HIGH);
   decelButton = new PushSwitch(decelButtonPin, 200, HIGH);
+  
+  this->signals = signals;
 }
 
 Controller::~Controller() {

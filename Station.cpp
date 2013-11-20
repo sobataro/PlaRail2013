@@ -17,14 +17,13 @@ boolean Station::check() {
   int check = 0;
 
   check += masterSignal->check();
-  check += slaveSignal->check();
-  
   if (!masterSignal->canEnter(NULL)) {
     // override slave's signal to red
     slaveSignal->restrict();
   } else {
     slaveSignal->release();
   }
+  check += slaveSignal->check();
 
   return check;
 }

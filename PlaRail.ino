@@ -18,6 +18,6 @@ void setup() {
 
 void loop() {
   ctc->loop();
-  delay(10);
+  delay(20);
 }
 

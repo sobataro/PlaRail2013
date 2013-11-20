@@ -29,13 +29,18 @@ void Signal::setNextSignal(Signal *nextSignal) {
   this->nextSignal = nextSignal;
 }
 
+Signal* Signal::getNextSignal() {
+  return nextSignal;
+}
+
 boolean Signal::check() {
   // check if the next train is approaching
   const int pre = preCds->check();
   const int main = mainCds->check();
   
   if (pre == HIGH && main == LOW && state == RUNNING) {
-    Serial.println("change to approaching");
+    Serial.print(getBlock());
+    Serial.println(": change to approaching");
     // the train is approaching to this signal
     state = APPROACHING;
     if (restricted || !nextSignal->canEnter(existingTrain)) {
@@ -48,7 +53,8 @@ boolean Signal::check() {
     }
   }
   if (pre == HIGH && main == HIGH && state == APPROACHING) {
-    Serial.println("change to passing");
+    Serial.print(getBlock());
+    Serial.println(": change to passing");
     state = PASSING;
     if (restricted || !nextSignal->canEnter(existingTrain)) {
       // stop the train
@@ -57,7 +63,8 @@ boolean Signal::check() {
   }
   if (state == PASSING && pre == LOW && main == LOW && nextSignal->canEnter(existingTrain)) { // last condition for noise tolerant
     // the train leaves; clear this block
-    Serial.println("change to no_train");
+    Serial.print(getBlock());
+    Serial.println(": change to no_train");
     state = NO_TRAIN;
     nextSignal->enter(existingTrain);
     existingTrain = NULL;
@@ -65,14 +72,15 @@ boolean Signal::check() {
   // change the signal
   if (restricted || !nextSignal->canEnter(existingTrain)) {
     // lights red
-    digitalWrite(signalPin, RED);
+    color = RED;
   } else {
     // lights green
-    digitalWrite(signalPin, GREEN);
+    color = GREEN;
     if (existingTrain != NULL && existingTrain->isRestricted()) {
       existingTrain->release();
     }
   }
+  digitalWrite(signalPin, color);
   
   boolean stateChanged = state != previousState;
 //  boolean stateChanged = state != previousState || lastPre != pre || lastMain != main;
@@ -84,6 +92,10 @@ boolean Signal::check() {
   previousState = state;
   
   return stateChanged;
+}
+
+int Signal::getColor() {
+  return color;
 }
 
 void Signal::print(int preCds, int mainCds) {

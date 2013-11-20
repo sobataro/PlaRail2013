@@ -18,14 +18,17 @@ public:
   
 private:
   Train *chuoRapid, *nex;
-  static const int NUM_SIGNALS = 6;
-  Signal *signals[NUM_SIGNALS];
+  Signal *signals[NUM_REAL_SIGNALS];
   Controller *controller;
   
   void trainsPrint();
   
   void accelTest();
   void maxSpeedTest();
+  
+  int nexRound;
+  int nexBlock;
+  long nexStoppedMillis;
 };
 
 #endif

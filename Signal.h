@@ -14,6 +14,7 @@ public:
   Signal(Block block, Train *initialTrain, State initialState, int preCdsPin, int mainCdsPin, int signalPin);
   
   virtual void setNextSignal(Signal *nextSignal);
+  Signal* getNextSignal();
   
   // called by each loop()
   virtual boolean check();
@@ -28,6 +29,10 @@ public:
   State getState();
   Train* getTrain();
   Block getBlock();
+
+  static const int GREEN = HIGH;
+  static const int RED = LOW;
+  int getColor();
 
   void restrict();
   void release();
@@ -51,8 +56,7 @@ private:
 
   void print(int preCds, int mainCds);
   
-  static const int GREEN = HIGH;
-  static const int RED = LOW;
+  int color;
 };
 
 #endif
