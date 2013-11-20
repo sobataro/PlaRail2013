@@ -3,6 +3,7 @@
 
 #include "PlaRail.h"
 #include "Train.h"
+#include "SchmidtTrigger.h"
 
 class Signal {
 public:
@@ -40,8 +41,7 @@ protected:
 private:
   Block block;
   Signal *nextSignal;
-  int preCdsPin;
-  int mainCdsPin;
+  SchmidtTrigger *preCds, *mainCds;
   int signalPin;
   int lastPre, lastMain;
   Train *existingTrain;

@@ -4,10 +4,10 @@ Signal::Signal(Block block, Train *initialTrain, State initialState, int preCdsP
   this->block = block;
   this->existingTrain = initialTrain;
   this->state = initialState;
-  this->preCdsPin = preCdsPin;
-  this->mainCdsPin = mainCdsPin;
+  this->preCds = new SchmidtTrigger(preCdsPin, 20, 10);
+  this->mainCds = new SchmidtTrigger(mainCdsPin, 20, 10);
   this->signalPin = signalPin;
-  release();
+  restricted = false;
   
   pinMode(preCdsPin, INPUT);
   pinMode(mainCdsPin, INPUT);
@@ -31,8 +31,8 @@ void Signal::setNextSignal(Signal *nextSignal) {
 
 boolean Signal::check() {
   // check if the next train is approaching
-  const int pre = digitalRead(preCdsPin);
-  const int main = digitalRead(mainCdsPin);
+  const int pre = preCds->check();
+  const int main = mainCds->check();
   
   if (pre == HIGH && main == LOW && state == RUNNING) {
     Serial.println("change to approaching");
@@ -52,10 +52,11 @@ boolean Signal::check() {
     state = PASSING;
     if (restricted || !nextSignal->canEnter(existingTrain)) {
       // stop the train
-      existingTrain->setSpeed(Train::MIN_SPEED);
+      existingTrain->restrict();
+//      existingTrain->setSpeed(Train::MIN_SPEED);
     }
   }
-  if (state == PASSING && pre == LOW && main == LOW) {
+  if (state == PASSING && pre == LOW && main == LOW && nextSignal->canEnter(existingTrain)) { // last condition for noise tolerant
     // the train leaves; clear this block
     Serial.println("change to no_train");
     state = NO_TRAIN;
@@ -66,9 +67,6 @@ boolean Signal::check() {
   if (restricted || !nextSignal->canEnter(existingTrain)) {
     // lights red
     digitalWrite(signalPin, RED);
-    if (existingTrain != NULL && !existingTrain->isRestricted()) {
-      existingTrain->restrict();
-    }
   } else {
     // lights green
     digitalWrite(signalPin, GREEN);

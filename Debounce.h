@@ -9,6 +9,8 @@ public:
   virtual int check();
   
 protected:
+  Debounce();
+  
   int pin;
   int state;
   long lastChangedMillis;

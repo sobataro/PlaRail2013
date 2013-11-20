@@ -1,7 +1,7 @@
 #include "CTC.h"
 
 CTC::CTC() {
-  Serial.println("");
+//  Serial.println("");
   Serial.println("CTC init()");
   Serial.println("");
   
@@ -35,7 +35,6 @@ CTC::CTC() {
 void CTC::loop() {
 //  accelTest();
   int changed = 0;
-//  nex->setSpeed(2);
   
   for (int i = 0; i < NUM_SIGNALS; i++) {
     changed += signals[i]->check();

@@ -7,6 +7,7 @@ class PushSwitch : public Debounce {
 public:
   PushSwitch(int pin, long delayMillis, int defaultState);
   int check();
+  
 private:
   int defaultState;
 };

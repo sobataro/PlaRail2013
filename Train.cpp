@@ -4,6 +4,7 @@ Train::Train(TrainType type, Block pos, int pwmPinA, int pwmPinB) {
   this->type = type;
   setPos(pos);
   this->speed = MIN_SPEED;
+  restricted = false;
   
   this->pwmPinA = pwmPinA;
   this->pwmPinB = pwmPinB;
@@ -54,6 +55,7 @@ boolean Train::isRestricted() {
 
 void Train::restrict() {
   restricted = true;
+  setSpeed(MIN_SPEED);
   print();
   Serial.println(" restricted");
 }

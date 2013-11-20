@@ -1,6 +1,7 @@
 #ifndef CTC_h
 #define CTC_h
 
+#include "Arduino.h"
 #include "PlaRail.h"
 #include "Train.h"
 #include "Signal.h"

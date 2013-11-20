@@ -8,6 +8,8 @@ Debounce::Debounce(int pin, long delayMillis) {
   lastChangedMillis = 0;
 }
 
+Debounce::Debounce() {}
+
 int Debounce::check() {
   int currentState = digitalRead(pin);
   if (currentState != state && millis() - lastChangedMillis > delayMillis) {
