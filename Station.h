@@ -14,7 +14,7 @@ public:
   boolean enter(Train *train);
   
   // for debug
-  void printTrainIfExists();
+  boolean printTrainIfExists();
 
 private:
   // 主本線と副本線

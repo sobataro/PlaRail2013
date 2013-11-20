@@ -53,7 +53,6 @@ boolean Signal::check() {
     if (restricted || !nextSignal->canEnter(existingTrain)) {
       // stop the train
       existingTrain->restrict();
-//      existingTrain->setSpeed(Train::MIN_SPEED);
     }
   }
   if (state == PASSING && pre == LOW && main == LOW && nextSignal->canEnter(existingTrain)) { // last condition for noise tolerant
@@ -106,9 +105,11 @@ void Signal::print(int preCds, int mainCds) {
 
 void Signal::restrict() {
   restricted = true;
+  /*
   if (existingTrain != NULL && !existingTrain->isRestricted()) {
     existingTrain->restrict();
   }
+  */
 }
 
 void Signal::release() {
@@ -118,13 +119,12 @@ void Signal::release() {
   }
 }
 
-void Signal::printTrainIfExists() {
+boolean Signal::printTrainIfExists() {
   if (existingTrain != NULL) {
-    Serial.print("[");
-    Serial.print(getBlock());
-    Serial.print(",");
-    Serial.print(existingTrain->getType() == EXPRESS ? "EXPRESS" : "RAPID");
-    Serial.print("]");
+    existingTrain->print();
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -135,6 +135,7 @@ boolean Signal::canEnter(Train *train) {
 boolean Signal::enter(Train *train) {
   if (canEnter(train)) {
     existingTrain = train;
+    existingTrain->setPos(getBlock());
     state = RUNNING;
     return true;
   } else {

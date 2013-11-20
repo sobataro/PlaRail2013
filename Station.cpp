@@ -29,9 +29,8 @@ boolean Station::check() {
   return check;
 }
 
-void Station::printTrainIfExists() {
-  masterSignal->printTrainIfExists();
-  slaveSignal->printTrainIfExists();
+boolean Station::printTrainIfExists() {
+  return masterSignal->printTrainIfExists() + slaveSignal->printTrainIfExists();
 }
 
 void Station::changeCrossing(int servoAngle) {

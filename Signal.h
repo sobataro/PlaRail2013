@@ -33,7 +33,7 @@ public:
   void release();
   
   // for debug
-  virtual void printTrainIfExists();
+  virtual boolean printTrainIfExists();
 
 protected:
   Signal();

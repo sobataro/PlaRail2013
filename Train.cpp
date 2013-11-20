@@ -72,5 +72,7 @@ void Train::print() {
   Serial.print(isRestricted() ? "RESTRICTED" : "released");
   Serial.print(",speed=");
   Serial.print(getSpeed());
+  Serial.print(",pos=");
+  Serial.print(getPos());
   Serial.print("]");
 }

@@ -1,7 +1,6 @@
 #include "SchmidtTrigger.h"
 
 SchmidtTrigger::SchmidtTrigger(int pin, int count, int threshold) : Debounce() {
-  Serial.println("SchmidtTrigger()");
   this->pin = pin;
   this->values = (int *) malloc(count * sizeof(int));
   this->threshold = threshold;
@@ -13,7 +12,6 @@ SchmidtTrigger::SchmidtTrigger(int pin, int count, int threshold) : Debounce() {
   for (int i = 0; i < count; i++) {
     values[i] = defaultValue;
   }
-  Serial.println("hoge");
 }
 
 SchmidtTrigger::~SchmidtTrigger() {
@@ -30,10 +28,3 @@ int SchmidtTrigger::check() {
   return threshold < sum;
 }
 
-/*
-private:
-  int count;
-  int pointer;
-  int threshold;
-  int values[];
-*/

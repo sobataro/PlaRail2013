@@ -34,6 +34,8 @@ CTC::CTC() {
 
 void CTC::loop() {
 //  accelTest();
+
+  nex->setSpeed(Train::MAX_SPEED);
   int changed = 0;
   
   for (int i = 0; i < NUM_SIGNALS; i++) {
@@ -41,21 +43,18 @@ void CTC::loop() {
   }
   controller->check();
   if (changed) {
-    for (int i = 0; i < NUM_SIGNALS; i++) {
-      signals[i]->printTrainIfExists();
-    }
-    Serial.println("");
     trainsPrint();
     Serial.println("");
   }
 }
 
 void CTC::trainsPrint() {
-  Serial.print("Trains: ");
   for (int i = 0; i < NUM_SIGNALS; i++) {
-    signals[i]->printTrainIfExists();
+    if (signals[i]->getTrain() != NULL) {
+      signals[i]->printTrainIfExists();
+      Serial.println("");
+    }
   }
-  Serial.println("");
 }
 
 void CTC::accelTest() {
