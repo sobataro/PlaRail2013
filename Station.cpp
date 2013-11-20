@@ -39,7 +39,14 @@ void Station::changeCrossing(int servoAngle) {
   crossingServo.write(servoAngle);
 }
 
+boolean Station::isTrainOnCrossing() {
+  return masterSignal->getState() == Signal::RUNNING || slaveSignal->getState() == Signal::RUNNING;
+}
+
 boolean Station::canEnter(Train *train) {
+  if (isTrainOnCrossing()) {
+    return false;
+  }
   if (train == NULL) {
     // 現在開通している方
     if (currentServoAngle == SERVO_ANGLE_MASTER) {

@@ -21,6 +21,10 @@ Train* Signal::getTrain() {
   return existingTrain;
 }
 
+Signal::State Signal::getState() {
+  return state;
+}
+
 void Signal::setNextSignal(Signal *nextSignal) {
   this->nextSignal = nextSignal;
 }

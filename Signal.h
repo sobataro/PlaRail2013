@@ -24,6 +24,7 @@ public:
   // override this signal to red
   void override();
 
+  State getState();
   Train* getTrain();
   Block getBlock();
 

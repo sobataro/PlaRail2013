@@ -12,7 +12,7 @@ public:
   boolean check();
   boolean canEnter(Train *train);
   boolean enter(Train *train);
-
+  
   // for debug
   void printTrainIfExists();
 
@@ -25,6 +25,7 @@ private:
   static const int SERVO_ANGLE_SLAVE = 0;
   int currentServoAngle;
   
+  boolean isTrainOnCrossing();
   void changeCrossing(int servoAngle);
 };
 
