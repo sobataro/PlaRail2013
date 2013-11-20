@@ -9,7 +9,7 @@ enum TrainType {
 };
 
 enum Block {
-  FUDA_2, FUDA_1, FUDA, CHOFU_2, CHOFU_1, CHOFU_MAIN, CHOFU_SUB
+  FUDA_2, FUDA_1, FUDA, CHOFU_2, CHOFU_1, CHOFU, CHOFU_MASTER, CHOFU_SLAVE
 };
 
 #endif

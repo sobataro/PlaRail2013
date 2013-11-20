@@ -10,31 +10,42 @@ public:
     NO_TRAIN, RUNNING, APPROACHING, PASSING
   };
 
-  Signal(Block block, Train *initialTrain, int preCdsPin, int mainCdsPin, int signalPin);
+  Signal(Block block, Train *initialTrain, State initialState, int preCdsPin, int mainCdsPin, int signalPin);
   
   // called by each loop()
-  boolean check(Signal *nextSignal);
-  
-  State getState();
-  
-  Block getBlock(Train *train);
+  virtual boolean check(Signal *nextSignal);
   
   // called by previous signal
-  boolean canEnter(Train *train);
+  virtual boolean canEnter(Train *train);
+  virtual boolean enter(Train *train);
   
-  boolean enter(Train *train);
+  // override this signal to red
+  void override();
+
+  Train* getTrain();
+  Block getBlock();
+
+  void restrict();
+  void release();
   
-  void clear();
+  // for debug
+  virtual void printTrainIfExists();
+
+protected:
+  Signal();
 
 private:
   Block block;
   int preCdsPin;
   int mainCdsPin;
   int signalPin;
+  int lastPre, lastMain;
   Train *existingTrain;
   State state, previousState;
   
-  void setSignal();
+  boolean restricted;
+
+  void print(int preCds, int mainCds);
   
   static const int GREEN = HIGH;
   static const int RED = LOW;

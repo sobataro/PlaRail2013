@@ -19,7 +19,7 @@ Block Train::getPos() {
   return pos;
 }
 
-const int Train::pwmDuty[] = {0, 128, 192, 224, 255};
+const int Train::pwmDuty[] = {0, 144, 192, 255};
 
 void Train::setPos(Block pos) {
   this->pos = pos;
@@ -34,7 +34,6 @@ void Train::setSpeed(int speed) {
     this->speed = speed;
     analogWrite(pwmPinB, 0);
     analogWrite(pwmPinA, pwmDuty[speed]);
-    Serial.println(pwmDuty[speed]);
   }
 }
 

@@ -17,12 +17,13 @@ public:
   void decelerate();
 
   static const int MIN_SPEED = 0;
-  static const int MAX_SPEED = 4;
+  static const int MAX_SPEED = 3;
+  static const int SPEED_LEVELS = MAX_SPEED - MIN_SPEED + 1;
 private:
   TrainType type;
   Block pos;
   int speed;
-  static const int pwmDuty[MAX_SPEED - MIN_SPEED + 1];
+  static const int pwmDuty[SPEED_LEVELS];
   int pwmPinA;
   int pwmPinB;
 };

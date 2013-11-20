@@ -4,6 +4,8 @@
 #include "PlaRail.h"
 #include "Train.h"
 #include "Signal.h"
+#include "Station.h"
+#include "Controller.h"
 
 class CTC {
 public:
@@ -15,8 +17,11 @@ public:
   
 private:
   Train *chuoRapid, *nex;
-  static const int NUM_SIGNALS = 7;
+  static const int NUM_SIGNALS = 6;
   Signal *signals[NUM_SIGNALS];
+  Controller *controller;
+  
+  void trainsPrint();
   
   void accelTest();
   void maxSpeedTest();
