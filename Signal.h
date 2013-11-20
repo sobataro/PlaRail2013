@@ -12,8 +12,10 @@ public:
 
   Signal(Block block, Train *initialTrain, State initialState, int preCdsPin, int mainCdsPin, int signalPin);
   
+  virtual void setNextSignal(Signal *nextSignal);
+  
   // called by each loop()
-  virtual boolean check(Signal *nextSignal);
+  virtual boolean check();
   
   // called by previous signal
   virtual boolean canEnter(Train *train);
@@ -36,6 +38,7 @@ protected:
 
 private:
   Block block;
+  Signal *nextSignal;
   int preCdsPin;
   int mainCdsPin;
   int signalPin;

@@ -8,7 +8,8 @@
 class Station : public Signal {
 public:
   Station(Signal *masterSignal, Signal *slaveSignal, int crossingServoPin);
-  boolean check(Signal *nextSignal);
+  void setNextSignal(Signal *nextSignal);
+  boolean check();
   boolean canEnter(Train *train);
   boolean enter(Train *train);
 

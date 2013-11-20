@@ -30,6 +30,9 @@ int Train::getSpeed() {
 }
 
 void Train::setSpeed(int speed) {
+  if (isRestricted()) {
+    speed = MIN_SPEED;
+  }
   if (MIN_SPEED <= speed && speed <= MAX_SPEED) {
     this->speed = speed;
     analogWrite(pwmPinB, 0);
@@ -45,3 +48,27 @@ void Train::decelerate() {
   setSpeed(speed - 1);
 }
 
+boolean Train::isRestricted() {
+  return restricted;
+}
+
+void Train::restrict() {
+  restricted = true;
+  print();
+  Serial.println(" restricted");
+}
+
+void Train::release() {
+  restricted = false;
+  print();
+  Serial.println(" released");
+}
+
+void Train::print() {
+  Serial.print(getType() == EXPRESS ? "Express" : "Rapid");
+  Serial.print("[");
+  Serial.print(isRestricted() ? "RESTRICTED" : "released");
+  Serial.print(",speed=");
+  Serial.print(getSpeed());
+  Serial.print("]");
+}

@@ -21,7 +21,11 @@ Train* Signal::getTrain() {
   return existingTrain;
 }
 
-boolean Signal::check(Signal *nextSignal) {
+void Signal::setNextSignal(Signal *nextSignal) {
+  this->nextSignal = nextSignal;
+}
+
+boolean Signal::check() {
   // check if the next train is approaching
   const int pre = digitalRead(preCdsPin);
   const int main = digitalRead(mainCdsPin);
@@ -32,8 +36,8 @@ boolean Signal::check(Signal *nextSignal) {
     state = APPROACHING;
     if (restricted || !nextSignal->canEnter(existingTrain)) {
       // slow down the train for stop
-      if (Train::MAX_SPEED / 2 < existingTrain->getSpeed()) {
-        existingTrain->setSpeed(Train::MAX_SPEED / 2);
+      if (Train::MIN_SPEED + 1 < existingTrain->getSpeed()) {
+        existingTrain->setSpeed(Train::MIN_SPEED + 1);
         Serial.print("slow down train #");
         Serial.println(existingTrain->getType());
       }
@@ -54,20 +58,27 @@ boolean Signal::check(Signal *nextSignal) {
     nextSignal->enter(existingTrain);
     existingTrain = NULL;
   }
-  
   // change the signal
-  digitalWrite(signalPin, (!restricted && nextSignal->canEnter(existingTrain)) ? GREEN : RED);
-
-  /*
-  boolean stateChanged = state != previousState;
-  if (stateChanged) print(pre, main);
-  */
-  boolean stateChanged = state != previousState || lastPre != pre || lastMain != main;
-  if (stateChanged) print(pre, main);
+  if (restricted || !nextSignal->canEnter(existingTrain)) {
+    // lights red
+    digitalWrite(signalPin, RED);
+    if (existingTrain != NULL && !existingTrain->isRestricted()) {
+      existingTrain->restrict();
+    }
+  } else {
+    // lights green
+    digitalWrite(signalPin, GREEN);
+    if (existingTrain != NULL && existingTrain->isRestricted()) {
+      existingTrain->release();
+    }
+  }
   
-  lastPre = pre;
-  lastMain = main;
-
+  boolean stateChanged = state != previousState;
+//  boolean stateChanged = state != previousState || lastPre != pre || lastMain != main;
+//  lastPre = pre;
+//  lastMain = main;
+//  if (stateChanged) print(pre, main);
+  
   // save current state for next check()
   previousState = state;
   
@@ -86,17 +97,23 @@ void Signal::print(int preCds, int mainCds) {
     if (existingTrain == NULL) {
       Serial.print("NULL");
     } else {
-      Serial.print(existingTrain->getType() == EXPRESS ? "EXPRESS" : "RAPID");
+      existingTrain->print();
     }
     Serial.println(")");
 }
 
 void Signal::restrict() {
   restricted = true;
+  if (existingTrain != NULL && !existingTrain->isRestricted()) {
+    existingTrain->restrict();
+  }
 }
 
 void Signal::release() {
   restricted = false;
+  if (nextSignal->canEnter(existingTrain) && existingTrain != NULL && existingTrain->isRestricted()) {
+    existingTrain->release();
+  }
 }
 
 void Signal::printTrainIfExists() {

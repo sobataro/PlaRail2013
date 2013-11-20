@@ -15,6 +15,12 @@ public:
   void setSpeed(int speed);
   void accelerate();
   void decelerate();
+  
+  boolean isRestricted();
+  void restrict();
+  void release();
+  
+  void print();
 
   static const int MIN_SPEED = 0;
   static const int MAX_SPEED = 3;
@@ -23,6 +29,7 @@ private:
   TrainType type;
   Block pos;
   int speed;
+  boolean restricted;
   static const int pwmDuty[SPEED_LEVELS];
   int pwmPinA;
   int pwmPinB;

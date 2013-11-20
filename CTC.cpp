@@ -21,6 +21,13 @@ CTC::CTC() {
   Signal *chofuSlave = new Signal(CHOFU_SLAVE, chuoRapid, Signal::PASSING, 36, 37, 35);
   signals[CHOFU] = new Station(chofuMaster, chofuSlave, 5);
   
+  signals[FUDA_2]->setNextSignal(signals[FUDA_1]);
+  signals[FUDA_1]->setNextSignal(signals[FUDA]);
+  signals[FUDA]->setNextSignal(signals[CHOFU_2]);
+  signals[CHOFU_2]->setNextSignal(signals[CHOFU_1]);
+  signals[CHOFU_1]->setNextSignal(signals[CHOFU]);
+  signals[CHOFU]->setNextSignal(signals[FUDA_2]);
+  
   int greenLedPins[] = {43, 42, 41};
   controller = new Controller(chuoRapid, 39, 38, 40, greenLedPins);
 }
@@ -31,10 +38,13 @@ void CTC::loop() {
 //  nex->setSpeed(2);
   
   for (int i = 0; i < NUM_SIGNALS; i++) {
-    changed += signals[i]->check(signals[(i + 1) % NUM_SIGNALS]);
+    changed += signals[i]->check();
   }
   controller->check();
   if (changed) {
+    for (int i = 0; i < NUM_SIGNALS; i++) {
+      signals[i]->printTrainIfExists();
+    }
     Serial.println("");
     trainsPrint();
     Serial.println("");

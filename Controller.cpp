@@ -40,5 +40,7 @@ void Controller::check() {
   for (int i = 0; i < Train::SPEED_LEVELS; i++) {
     digitalWrite(greenLedPins[i], i < train->getSpeed());
   }
+  
+  digitalWrite(redLedPin, train->isRestricted());
 }
 
