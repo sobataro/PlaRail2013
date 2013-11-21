@@ -26,10 +26,6 @@ private:
   
   void accelTest();
   void maxSpeedTest();
-  
-  int nexRound;
-  int nexBlock;
-  long nexStoppedMillis;
 };
 
 #endif

@@ -31,9 +31,6 @@ CTC::CTC() {
   
   int greenLedPins[] = {43, 42, 41};
   controller = new Controller(chuoRapid, 39, 38, 40, greenLedPins, signals);
-  
-  nexBlock = CHOFU_MASTER;
-  nexRound = 0;
 }
 
 void CTC::loop() {
