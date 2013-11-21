@@ -6,6 +6,7 @@
 #include "Train.h"
 #include "Signal.h"
 #include "Station.h"
+#include "DepartureSignal.h"
 #include "Controller.h"
 
 class CTC {

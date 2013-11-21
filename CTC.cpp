@@ -18,7 +18,7 @@ CTC::CTC() {
   signals[CHOFU_2] = new Signal(CHOFU_2, NULL, Signal::NO_TRAIN, 24, 25, 26);
   signals[CHOFU_1] = new Signal(CHOFU_1, NULL, Signal::NO_TRAIN, 28, 29, 27);
   
-  signals[CHOFU_MASTER] = new Signal(CHOFU_MASTER, nex, Signal::APPROACHING, 32, 33, 34);
+  signals[CHOFU_MASTER] = new DepartureSignal(CHOFU_MASTER, nex, Signal::APPROACHING, 32, 33, 34, 1000 * 3);
   signals[CHOFU_SLAVE] = new Signal(CHOFU_SLAVE, chuoRapid, Signal::APPROACHING, 36, 37, 35);
   signals[CHOFU] = new Station(signals[CHOFU_MASTER], signals[CHOFU_SLAVE], 5);
   
@@ -38,7 +38,7 @@ CTC::CTC() {
 
 void CTC::loop() {
 //  accelTest();
-  nex->setSpeed(2);
+  nex->setSpeed(3);
 
   int changed = 0;
   for (int i = 0; i < NUM_SIGNALS; i++) {
