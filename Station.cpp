@@ -16,13 +16,13 @@ void Station::setNextSignal(Signal *nextSignal) {
 boolean Station::check() {
   int check = 0;
 
-  check += masterSignal->check();
   if (!masterSignal->canEnter(NULL)) {
     // override slave's signal to red
     slaveSignal->restrict();
   } else {
     slaveSignal->release();
   }
+  check += masterSignal->check();
   check += slaveSignal->check();
 
   return check;

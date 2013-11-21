@@ -42,8 +42,11 @@ public:
 
 protected:
   Signal();
+  virtual void setApproaching();
+  virtual void setPassing();
+  virtual void setNoTrain();
 
-private:
+//private:
   Block block;
   Signal *nextSignal;
   SchmidtTrigger *preCds, *mainCds;

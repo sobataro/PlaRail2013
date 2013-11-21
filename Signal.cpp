@@ -33,46 +33,61 @@ Signal* Signal::getNextSignal() {
   return nextSignal;
 }
 
+void Signal::setApproaching() {
+  Serial.print(getBlock());
+  Serial.println(": change to approaching");
+  // the train is approaching to this signal
+  state = APPROACHING;
+  if (restricted || !nextSignal->canEnter(existingTrain)) {
+    // slow down the train for stop
+    if (Train::MIN_SPEED + 1 < existingTrain->getSpeed()) {
+      existingTrain->setSpeed(Train::MIN_SPEED + 1);
+      Serial.print("slow down train #");
+      Serial.println(existingTrain->getType());
+    }
+  }
+}
+
+void Signal::setPassing() {
+  Serial.print(getBlock());
+  Serial.println(": change to passing");
+  state = PASSING;
+  if (restricted || !nextSignal->canEnter(existingTrain)) {
+    // stop the train
+    existingTrain->restrict();
+  }
+}
+
+void Signal::setNoTrain() {
+  // the train leaves; clear this block
+  Serial.print(getBlock());
+  Serial.println(": change to no_train");
+  state = NO_TRAIN;
+  nextSignal->enter(existingTrain);
+  existingTrain = NULL;
+}
+
 boolean Signal::check() {
   // check if the next train is approaching
   const int pre = preCds->check();
   const int main = mainCds->check();
   
   if (pre == HIGH && main == LOW && state == RUNNING) {
-    Serial.print(getBlock());
-    Serial.println(": change to approaching");
-    // the train is approaching to this signal
-    state = APPROACHING;
-    if (restricted || !nextSignal->canEnter(existingTrain)) {
-      // slow down the train for stop
-      if (Train::MIN_SPEED + 1 < existingTrain->getSpeed()) {
-        existingTrain->setSpeed(Train::MIN_SPEED + 1);
-        Serial.print("slow down train #");
-        Serial.println(existingTrain->getType());
-      }
-    }
+    setApproaching();
   }
   if (pre == HIGH && main == HIGH && state == APPROACHING) {
-    Serial.print(getBlock());
-    Serial.println(": change to passing");
-    state = PASSING;
-    if (restricted || !nextSignal->canEnter(existingTrain)) {
-      // stop the train
-      existingTrain->restrict();
-    }
+    setPassing();
   }
   if (state == PASSING && pre == LOW && main == LOW && nextSignal->canEnter(existingTrain)) { // last condition for noise tolerant
-    // the train leaves; clear this block
-    Serial.print(getBlock());
-    Serial.println(": change to no_train");
-    state = NO_TRAIN;
-    nextSignal->enter(existingTrain);
-    existingTrain = NULL;
+    setNoTrain();
   }
   // change the signal
   if (restricted || !nextSignal->canEnter(existingTrain)) {
     // lights red
     color = RED;
+    if (existingTrain != NULL && state == PASSING && !existingTrain->isRestricted()) {
+      existingTrain->restrict();
+    }
   } else {
     // lights green
     color = GREEN;
