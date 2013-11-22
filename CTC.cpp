@@ -13,8 +13,9 @@ CTC::CTC() {
   
 //  signals[FUDA_2] = new Signal(FUDA_2, NULL, Signal::NO_TRAIN, 13, 12, 11);
   signals[FUDA_2] = new Signal(FUDA_2, NULL, Signal::NO_TRAIN, 46, 47, 48);
-  signals[FUDA_1] = new Signal(FUDA_1, NULL, Signal::NO_TRAIN, 10, 9, 8);
-  signals[FUDA] = new Signal(FUDA, NULL, Signal::NO_TRAIN, 22, 3, 2);
+//  signals[FUDA_1] = new Signal(FUDA_1, NULL, Signal::NO_TRAIN, 10, 9, 8);
+  signals[FUDA_1] = new Signal(FUDA_1, NULL, Signal::NO_TRAIN, 10, 9, 49);
+  signals[FUDA] = new Signal(FUDA, NULL, Signal::NO_TRAIN, 22, 3, 23);
   signals[CHOFU_2] = new Signal(CHOFU_2, NULL, Signal::NO_TRAIN, 24, 25, 26);
   signals[CHOFU_1] = new Signal(CHOFU_1, NULL, Signal::NO_TRAIN, 28, 29, 27);
   

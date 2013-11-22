@@ -4,8 +4,8 @@ Signal::Signal(Block block, Train *initialTrain, State initialState, int preCdsP
   this->block = block;
   this->existingTrain = initialTrain;
   this->state = initialState;
-  this->preCds = new SchmidtTrigger(preCdsPin, 20, 10);
-  this->mainCds = new SchmidtTrigger(mainCdsPin, 20, 10);
+  this->preCds = new SchmidtTrigger(preCdsPin, 30, 15);
+  this->mainCds = new SchmidtTrigger(mainCdsPin, 30, 15);
   this->signalPin = signalPin;
   restricted = false;
   
@@ -97,11 +97,11 @@ boolean Signal::check() {
   }
   digitalWrite(signalPin, color);
   
-  boolean stateChanged = state != previousState;
-//  boolean stateChanged = state != previousState || lastPre != pre || lastMain != main;
-//  lastPre = pre;
-//  lastMain = main;
-//  if (stateChanged) print(pre, main);
+//  boolean stateChanged = state != previousState;
+  boolean stateChanged = state != previousState || lastPre != pre || lastMain != main;
+  lastPre = pre;
+  lastMain = main;
+  if (stateChanged) print(pre, main);
   
   // save current state for next check()
   previousState = state;

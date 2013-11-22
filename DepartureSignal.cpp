@@ -11,10 +11,6 @@ boolean DepartureSignal::check() {
   const int pre = preCds->check();
   const int main = mainCds->check();
   
-  /*
-  Serial.print("state=");
-  Serial.println(state);
-  */
   if (pre == HIGH && main == LOW && state == RUNNING) {
     setApproaching();
     existingTrain->setSpeed(1);
