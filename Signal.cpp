@@ -4,8 +4,8 @@ Signal::Signal(Block block, Train *initialTrain, State initialState, int preCdsP
   this->block = block;
   this->existingTrain = initialTrain;
   this->state = initialState;
-  this->preCds = new SchmidtTrigger(preCdsPin, 30, 15);
-  this->mainCds = new SchmidtTrigger(mainCdsPin, 30, 15);
+  this->preCds = new SchmidtTrigger(preCdsPin, 20, 10);
+  this->mainCds = new SchmidtTrigger(mainCdsPin, 20, 10);
   this->signalPin = signalPin;
   restricted = false;
   
