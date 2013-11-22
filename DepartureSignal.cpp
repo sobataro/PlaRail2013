@@ -58,4 +58,7 @@ boolean DepartureSignal::check() {
   return stateChanged;
 }
 
-
+boolean DepartureSignal::enter(Train *train) {
+  train->setSpeed(1);
+  return Signal::enter(train);
+}
